@@ -7,5 +7,7 @@ The current backend is implemented in blockchain. There are currently two types 
 1. Identity Chain: A chain run by each individual that houses their identity. It maintains identity data such as their features, their attributes, their Verifiable Credentials and other details that pertain to them. Please refer to the [Intersectional Social Data(ISD) protocol](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3375436) to have a deeper understanding of how we model an Identity within a network.
 2. Network Chain: A chain that is maintained by the participants of the network. Each network is modelled around their aim or goal. Each identity enacts a certain role within the network in order to advance the networks aim or goal.
 
+Further details on the protocol can be found in the [protocol-specs](./docs/protocol-specs) folder.
+
 # Frontend
 Frontend will mostly be smart contracts, dApps that individuals can download and run on their chains along with the UI written in React. Work on this will be started soon...
