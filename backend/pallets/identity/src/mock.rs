@@ -1,4 +1,4 @@
-use crate as pallet_template;
+use crate as pallet_identity;
 use frame_support::derive_impl;
 use sp_runtime::BuildStorage;
 
@@ -9,7 +9,7 @@ frame_support::construct_runtime!(
 	pub enum Test
 	{
 		System: frame_system,
-		TemplateModule: pallet_template,
+		IdentityModule: pallet_identity,
 	}
 );
 
@@ -18,7 +18,7 @@ impl frame_system::Config for Test {
 	type Block = Block;
 }
 
-impl pallet_template::Config for Test {
+impl pallet_identity::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 }

@@ -8,14 +8,14 @@ edition = "2021"
 [workspace]
 members = [
     "node",
-    "pallets/template",
+    "pallets/identity",
     "runtime",
 ]
 resolver = "2"
 
 [workspace.dependencies]
 solochain-template-runtime = { path = "./runtime", default-features = false }
-pallet-template = { path = "./pallets/template", default-features = false }
+pallet-identity = { path = "./pallets/identity", default-features = false }
 clap = { version = "4.5.3" }
 frame-benchmarking-cli = { version = "42.0.0", default-features = false }
 frame-system = { version = "37.0.0", default-features = false }
