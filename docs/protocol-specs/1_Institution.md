@@ -19,10 +19,13 @@ An institution that takes part in the system of production considers the 7 M’s
 
 Every institution maintains a mapping of the peer to the role they play in advancing the aim/goal of the institution. Let us take the example of Namma Yatri, a ride hailing app built by the beckn community to understand the various peers in this institution and the role they play.
 
-Peer 1: Developer (Skill & Ability, Market/Domain)
-Peer 2: Driver (Skill, Material Provider(Automobile), Community Member, Motive Power(Human labour))
-Peer 3: Executive (Management)
-Peer 4: Role Certifier (Management) Can be automated using AI
+**Peer 1**: Developer (Skill & Ability, Market/Domain),
+
+**Peer 2**: Driver (Skill, Material Provider(Automobile), Community Member, Motive Power(Human labour)),
+
+**Peer 3**: Executive (Management),
+
+**Peer 4**: Role Certifier (Management) Can be automated using AI 
 
 **Man**: Here man represents the skill & ability of the participating individual. A peer can be a developer, driver, driver community leader, skill/ability certifier in the case of Namma Yatri.
 
