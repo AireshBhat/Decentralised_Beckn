@@ -10,10 +10,6 @@ All institutions are interdependent, mutually complementary. There should be a s
 
 > In the definition of democracy, viz. “Government of the people, by the people and for the people”; ‘of’ stands for independence; ‘by’ stands for democracy; and ‘for’ indicates Dharma. - Pandit Deendayal Upadhyay
 
-## Decentralisation
-The term decentralisation is thrown around a lot in the blockchain space. Anything implemented via a blockchain is called “decentralised”. Decentralised Finance DeFi, Decentralised Physical Infrastructure DePIn, Decentralised Autonomous Organisations, the list keeps growing. However, before we move forward, we need to keep clear what the meaning of decentralised is in our context.
-By decentralisation, we mean the existence of many institutions of equal power as that of the State. By decentralisation, we mean the ability of every individual to have a direct sense of participation in the management of the goods and resources within their economy. Every institute plays a hand in the development of social life, each playing a unique role in the lives of the citizens they touch. To that effect, Decentralised Autonomous Institutions or Decentralised Autonomous Organisations are a few terms that suggest the kind of systems our tool aims to engender.
-
 ## Network
 An institution that takes part in the system of production considers the 7 M’s, man, material, money, management, motive power, market and machine. In order to allow creation of complementarities between multiple networks, information regarding the 7 M’s are made public to those interacting with the network. New associations and connections can be created between networks in order to exchange the goods and services, I.e. capital, engendering diverse relationships between communities.
 
@@ -51,75 +47,60 @@ Every institution maintains a mapping of the peer to the role they play in advan
 - Maintains a record of ratings of network peers regarding various features/services offered by them.
 
 ## Technical Implementation
-Each message by an identity with the network is structured in a certain way. The Beckn Protocol structures defines their “packet structure”(How data is grouped while communicating) as a pair of context and message. The context provides information/metadata regarding the message it contains, the network, location of operation, spec. It also contains the protocols the sender identity uses to communicate. The technical implementation in web3 however follows the IPNS record structure, adding on to it a few parameters such as network ID, location and action.
+The entire network is identity centric. The network is made up of a group of individuals that maintain an identity. The above definitions make up the DNA of an institution. The network is comprised of the following components:
+```rust
+pub struct NetworkDef {
+    /// The name of the network.
+    pub name: String,
 
-Example of a record comparing the Beckn message structure and how the data is encoded in an IPNS Record. Future protocols will assume this packet structure and will mention any additional keys to be added.
-Context[1](%20https://developers.becknprotocol.io/docs/core-specification/schema-reference/contextforsearch):
+    /// Modifiers of this network - the network seed, properties and origin time.
+    ///  The modifiers are included in the DNA hash
+    /// computation.
+    pub modifiers: NetworkModifiers,
 
-|                 |                                                                                                                 |                                                                                                                                        |
-| --------------- | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Field**       | **Type**                                                                                                        | **Description**                                                                                                                        |
-| domain          | string                                                                                                          | Describes the domain of an object                                                                                                      |
-| country         | [Country/properties/code](https://developers.becknprotocol.io/docs/core-specification/schema-reference/country) | Country code                                                                                                                           |
-| city            | [City/properties/code](https://developers.becknprotocol.io/docs/core-specification/schema-reference/city)       | City code                                                                                                                              |
-| action          | string                                                                                                          | Defines the Beckn API call. Any actions other than the ennumerated actions are not supported by Beckn Protocol Allowed values : search |
-| core\_version   | string                                                                                                          | Version of Beckn core API specification being used                                                                                     |
-| bap\_id         | string                                                                                                          | Unique id of the BAP.                                                                                                                  |
-| bap\_uri        | string                                                                                                          | URI of the BAP for accepting callbacks.                                                                                                |
-| bpp\_id         | string                                                                                                          | Unique id of the BPP.                                                                                                                  |
-| bpp\_uri        | string                                                                                                          | URI of the BPP.                                                                                                                        |
-| transaction\_id | string                                                                                                          | This is a unique value which persists across all API calls from search through confirm                                                 |
-| message\_id     | string                                                                                                          | This is a unique value which persists during a request / callback cycle                                                                |
-| timestamp       | string                                                                                                          | Time of request generation                                                                                                             |
-| key             | string                                                                                                          | The encryption public key of the sender                                                                                                |
-| ttl             | string                                                                                                          | The duration after timestamp for which this message holds valid                                                                        |
+    /// A vector of zomes associated with your DNA.
+    pub schema: IntegrityZomes,
 
+    /// A vector of zomes that do not affect
+    /// the [`DnaHash`].
+    pub coordinator_zomes: CoordinatorZomes,
 
-IPNS Record[2](%20https://specs.ipfs.tech/ipns/ipns-record/):
+    /// A list of past "ancestors" of this DNA.
+    ///
+    /// Whenever a DNA is created which is intended to be used as a migration from
+    /// a previous DNA, the lineage should be updated to include the hash of the
+    /// DNA being migrated from. DNA hashes may also be removed from this list if
+    /// it is desired to remove them from the lineage.
+    ///
+    /// The meaning of the "ancestor" relationship is as follows:
+    /// - For any DNA, there is a migration path from any of its ancestors to itself.
+    /// - When an app depends on a DnaHash via UseExisting, it means that any installed
+    ///     DNA in the lineage which contains that DnaHash can be used.
+    /// - The app's Coordinator interface is expected to be compatible across the lineage.
+    ///     (Though this cannot be enforced, since Coordinators can be swapped out at
+    ///      will by the user, the intention is still there.)
+    ///
+    /// Holochain does nothing to ensure the correctness of the lineage, it is up to
+    /// the app developer to make the necessary guarantees.
+    pub lineage: HashSet<DnaHash>,
+}
 
-|                 |          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Field**       | **Type** | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| Value           | bytes    | It can be any content path, such as a /ipns/{ipns-key} path to another IPNS record, a [DNSLink](https://dnslink.dev/) path (/ipns/example.com) or an immutable IPFS path (/ipfs/baf...). Implementations must include this value inside the DAG-CBOR document in IpnsEntry.data[Value].                                                                                                                                                                                                                                              |
-| Validity Type   | uint64   | Defines the conditions under which the record is valid. The only supported value is 0, which indicates the validity field contains the expiration date after which the IPNS record becomes invalid. Implementations must support ValidityType = 0 and include this value inside the DAG-CBOR document at IpnsEntry.data[ValidityType].                                                                                                                                                                                               |
-| Validity        | bytes    | Expiration date of the record with nanoseconds precision. Expiration time should match the publishing medium's window.                                                                                                                                                                                                                                                                                                                                                                                                               |
-| Sequence        | uint64   | Represents the current version of the record (starts at 0). Implementations must include this value in inside the DAG-CBOR document at IpnsEntry.data[Sequence].                                                                                                                                                                                                                                                                                                                                                                     |
-| TTL             | uint64   | A hint for how long (in nanoseconds) the record should be cached before going back to, for instance the DHT, in order to check if it has been updated. The function and trade-offs of this value are analogous to the TTL of DNS record. Implementations must include this value inside the DAG-CBOR document at IpnsEntry.data[TTL].                                                                                                                                                                                                |
-| Public Key      | bytes    | Public key used to sign this record. If public key is small enough to fit in IPNS name (e.g., Ed25519 keys inlined using identity multihash), IpnsEntry.pubKey field is redundant and may be skipped to save space. The public key must be included if it cannot be extracted from the IPNS name (e.g., legacy RSA keys). Implementers must follow key serialization defined in [PeerID specs](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#key-types). List of supported key types listed in IPNS Keys section. |
-| Signature       | bytes    | Provides the cryptographic proof that the IPNS record was created by the owner of the private key. Implementations must include this value in IpnsEntry.signatureV2 and follow signature creation and verification as described in Record Creation and Record Verification.                                                                                                                                                                                                                                                          |
-| Extensible Data | DAG-CBOR | Extensible record data in [DAG-CBOR](https://ipld.io/specs/codecs/dag-cbor/spec/) format. **Extra fields related to the beckn protocol will be added here**.                                                                                                                                                                                                                                                                                                                                                                         |
+pub struct NetworkModifiers {
+    /// The network seed of a network is included in the computation of the network hash.
+    /// The network hash in turn determines the network peers and the DHT, meaning
+    /// that only peers with the same network hash of a shared network participate in the
+    /// same network and co-create the DHT. To create a separate DHT for the network,
+    /// a unique network seed can be specified.
+    pub network_seed: NetworkSeed,
 
-As mentioned in the above table, extra data related to beckn such as the network location, network ID, network spec version and action are added in a DAG-CBOR[3](https://ipld.io/specs/codecs/dag-cbor/spec/) encoded format to be interoperable with the IPFS network.
+    /// Any arbitrary application properties can be included in this object.
+    pub properties: SerializedBytes,
 
-|                    |          |                                                                                                                |
-| ------------------ | -------- | -------------------------------------------------------------------------------------------------------------- |
-| **Field**          | **Type** | **Description**                                                                                                |
-| Network ID         | CID      | Substrate chain spec ID                                                                                        |
-| Network Location   | bytes    | Motherland/Location of the network                                                                             |
-| Beckn Spec Version | bytes    | Version of Beckn core API specification being used                                                             |
-| Action             | bytes    | Defines the Beckn API call. Any actions other than the ennumerated actions are not supported by Beckn Protocol |
+    /// The time used to denote the origin of the network, used to calculate
+    /// time windows during gossip.
+    /// All Action timestamps must come after this time.
+    pub genesis_time: Timestamp,
+}
 
-
-	message NetworkEntry {
-	 optional bytes pubKey = 7;
-	 optional bytes signatureV2 = 8;
-	 optional bytes data = 9;
-	}
-
-	// NetworkEntry.data
-	{
-	  Sequence: …
-	  TTL: …
-	  Validity: …
-	  ValidityType: …
-	  Value: …
-	  ExtensibleData: …
-	}
-
-	// NetworkEntry.data.ExtensibleData
-	{
-	  NetworkID: …
-	  NetworkLocation: …
-	  BecknSpecVersion: …
-	  Action: …
-	}
+pub type NetworkSeed = String;
+```
