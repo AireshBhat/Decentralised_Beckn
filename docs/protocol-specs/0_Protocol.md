@@ -16,7 +16,8 @@ The protocol acts as a tool to help bring nature to culture. Chiti, the Spirit I
 
 ## What is the role of duration & repititiveness in the protocol?
 >It is the protocol itself that creates a sense of time
-Blockchain consensus engines such as Polkadots BABE + GRANDPA protocol provide a sense of time to the participants network.
+
+Blockchain consensus engines such as Polkadots' BABE + GRANDPA protocol provide a sense of time to the participants network.
 BABE (Blind Assignment for Blockchain Extension) and GRANDPA (GHOST-based Recursive Ancestor Deriving Prefix Agreement) are two complementary protocols used by Polkadot to achieve consensus on its blockchain network.
 
 BABE is the block production mechanism. It assigns block creation slots to validators in a randomized but weighted manner, ensuring a fair and decentralized block generation process. Validators take turns producing blocks in a sequence, which helps maintain a steady flow of new blocks on the chain.
@@ -31,3 +32,13 @@ The vision of the project is to establish Dharma. Here Dharma can be loosely tra
 
 ## What is the definition of the protocol?
 A tool for systems to help instill intrinsic responsibility within its citizens.
+
+## How is the protocol structured?
+The protocol is comprised of many sub protocols, each of which is designed to help the network participants interact with each other in a fair and just manner. 
+* The Data protocol, how each network structures their message packets and how each network stores data pertaining to the network and to the participants is provided in the [1_Data.md](./1_Data.md) file.
+* General structure of the data each network must maintain as part of the protocol and the logic behind them is provided in the [1_Institution.md](./1_Institution.md) file.
+* Every network must provide the basic tools to its citizens to maintain their "digital identity". The process of onboarding a new user and the protocols for creating a digital identity for them is provided in the [2_Onboarding.md](./2_Onboarding.md) file.
+* Every network defines a DHT table, similar to a DNS table which maps the IP address of a server to a "url" of a network providing data using the HTML protocol. This allows external participants to find peers within the network that can potentially provide the service they are looking for. The protocol for maintaining this DHT table to discover network peers and their services is provided in the [3_Discovery.md](./3_Discovery.md) file.
+* Every network constructs rules and regulations based on their aim or goal, formally called Chiti. These rules and regulations can change as the network evolves. Contracts/Interactions created by network peers are checked basis these rules and regulations and are added to the network blockchain if they satisfy the Chiti. The protocol for maintaining the Chiti and the rules and regulations of the network is provided in the [4_ContractCreation.md](./4_ContractCreation.md) file.
+* Fulfillment and Tracking of the contract and its closure is provided in the [5_FulfillmentTracking.md](./5_FulfilmentTracking.md) file. These additional rules are defined during contract creation and are used to determine the success or failure of the contract. Each contract could be thought of as a new branch of a git repository. Once fulfilled, the contract is merged into the main branch of the network blockchain, highlighting the contribution towards the progress of the networks aim/goal.
+* Rating and feedback play a crucial role in the feedback mechanism of the network. To determine whether the actions being taken by the network peers are actually advancing the aims/goals of the network, rating and feedback is requested from the network participants. Interactions and contracts are rated allowing the network to fairly determine the efficacy of a product/service. The protocol for maintaining the rating and feedback of the network participants is provided in the [6_RatingFeedback.md](./6_RatingFeedback.md) file.

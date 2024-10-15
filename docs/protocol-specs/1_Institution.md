@@ -23,6 +23,8 @@ Every institution maintains a mapping of the peer to the role they play in advan
 
 **Peer 4**: Role Certifier (Management) Can be automated using AI 
 
+---
+
 **Man**: Here man represents the skill & ability of the participating individual. A peer can be a developer, driver, driver community leader, skill/ability certifier in the case of Namma Yatri.
 
 **Material**: Easy availability of the required raw material, including the quality and properties of the raw material. In the above example, the material can be any automobile, verification machines.
@@ -59,28 +61,28 @@ pub struct NetworkDef {
     pub modifiers: NetworkModifiers,
 
     /// A vector of zomes associated with your DNA.
-    pub schema: IntegrityZomes,
+    pub integrity_schema: IntegrityZomes,
 
     /// A vector of zomes that do not affect
     /// the [`DnaHash`].
-    pub coordinator_zomes: CoordinatorZomes,
+    pub coordinator_schema: CoordinatorZomes,
 
-    /// A list of past "ancestors" of this DNA.
+    /// A list of past "ancestors" of this network.
     ///
-    /// Whenever a DNA is created which is intended to be used as a migration from
-    /// a previous DNA, the lineage should be updated to include the hash of the
-    /// DNA being migrated from. DNA hashes may also be removed from this list if
+    /// Whenever a network is created which is intended to be used as a migration from
+    /// a previous network, the lineage should be updated to include the hash of the
+    /// network being migrated from. Network hashes may also be removed from this list if
     /// it is desired to remove them from the lineage.
     ///
     /// The meaning of the "ancestor" relationship is as follows:
-    /// - For any DNA, there is a migration path from any of its ancestors to itself.
-    /// - When an app depends on a DnaHash via UseExisting, it means that any installed
-    ///     DNA in the lineage which contains that DnaHash can be used.
+    /// - For any network, there is a migration path from any of its ancestors to itself.
+    /// - When an app depends on a NetworkHash via UseExisting, it means that any installed
+    ///     network in the lineage which contains that NetworkHash can be used.
     /// - The app's Coordinator interface is expected to be compatible across the lineage.
     ///     (Though this cannot be enforced, since Coordinators can be swapped out at
     ///      will by the user, the intention is still there.)
     ///
-    /// Holochain does nothing to ensure the correctness of the lineage, it is up to
+    /// The software itself does nothing to ensure the correctness of the lineage, it is up to
     /// the app developer to make the necessary guarantees.
     pub lineage: HashSet<DnaHash>,
 }
@@ -103,4 +105,18 @@ pub struct NetworkModifiers {
 }
 
 pub type NetworkSeed = String;
+
+enum Component {
+    Unencrypted(ComponentData),
+    Encrypted {
+        algorithm: EncryptionAlgorithmId,
+        key_id: [u8; 32],
+        encrypted_data: Vec<u8>,
+    }
+}
+
+struct ComponentData {
+    schema: SchemaId,
+    data: Vec<u8>,
+}
 ```
